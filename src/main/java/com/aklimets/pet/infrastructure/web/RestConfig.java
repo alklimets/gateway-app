@@ -1,5 +1,6 @@
 package com.aklimets.pet.infrastructure.web;
 
+import com.aklimets.pet.infrastructure.handler.RestTemplateResponseErrorHandler;
 import com.aklimets.pet.infrastructure.interceptor.OutgoingRequestInterceptor;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,7 @@ public class RestConfig {
     public RestTemplate securityRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getInterceptors().add(outgoingRequestInterceptor);
+        restTemplate.setErrorHandler(new RestTemplateResponseErrorHandler());
         return restTemplate;
     }
 }
