@@ -22,8 +22,10 @@ public class AuthEntrypoint implements AuthenticationEntryPoint {
                          AuthenticationException authException) throws IOException {
         log.warn("Authentication failed: {}", authException.getMessage());
         response.setContentType("application/json");
-        response.setStatus(401);
-        response.getOutputStream().print("{\"errorCode\":\"401\",\"message\":\"UNAUTHORIZED\"}");
+        response.setStatus(response.getStatus());
+        response.getOutputStream().print("{\"errorCode\":\"" +
+                response.getStatus() + "\",\"message\":\"" +
+                authException.getMessage() + "\"}");
     }
 
 }

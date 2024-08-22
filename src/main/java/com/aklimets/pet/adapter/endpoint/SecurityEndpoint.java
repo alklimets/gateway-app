@@ -1,4 +1,4 @@
-package com.aklimets.pet.adapter.controller;
+package com.aklimets.pet.adapter.endpoint;
 
 import com.aklimets.pet.application.service.SecurityService;
 import com.aklimets.pet.domain.dto.request.AuthenticationRequest;
