@@ -5,20 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
-@Embeddable
 @Getter
 @AllArgsConstructor
-@EqualsAndHashCode
-public class Country implements DomainAttribute<String> {
+@EqualsAndHashCode(callSuper = true)
+public class Country extends DomainAttribute<String> {
 
-    @Column(name = "country")
+
     @NotNull
     private String value;
 
-    protected Country() {
-    }
 }

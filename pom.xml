@@ -44,9 +44,16 @@
 			<artifactId>model</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+
 		<dependency>
 			<groupId>com.aklimets.pet</groupId>
 			<artifactId>jwt</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.aklimets.pet</groupId>
+			<artifactId>building-block</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 
