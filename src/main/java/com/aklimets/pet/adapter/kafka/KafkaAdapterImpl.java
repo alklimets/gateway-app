@@ -28,11 +28,11 @@ public class KafkaAdapterImpl implements DomainEventAdapter {
 
         Headers headers = new RecordHeaders();
         if (event instanceof RequestableDomainEvent<?> domainEvent) {
-            String requestId = ((RequestId) domainEvent.getRequestId()).getValue();
+            var requestId = ((RequestId) domainEvent.getRequestId()).getValue();
             headers.add("requestId", requestId.getBytes());
         }
 
-        ProducerRecord<String, DomainEvent> record = new ProducerRecord<>(requestsCountsTopic, null, "Requests count", event, headers);
+        var record = new ProducerRecord<>(requestsCountsTopic, null, "Requests count", event, headers);
         kafkaTemplate.send(record);
         log.info("Event has been sent - {}", event);
     }

@@ -15,7 +15,7 @@ public class RestConfig {
 
     @Bean
     public RestTemplate securityRestTemplate() {
-        RestTemplate restTemplate = new RestTemplate();
+        var restTemplate = new RestTemplate();
         restTemplate.getInterceptors().add(outgoingRequestInterceptor);
         restTemplate.setErrorHandler(new RestTemplateResponseErrorHandler());
         return restTemplate;

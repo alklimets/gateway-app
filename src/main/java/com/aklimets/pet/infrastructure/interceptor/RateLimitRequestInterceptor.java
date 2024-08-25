@@ -7,13 +7,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import static java.lang.String.format;
-import static java.time.ZoneOffset.UTC;
 import static org.springframework.http.HttpStatus.TOO_MANY_REQUESTS;
 
 @Component
@@ -32,8 +30,8 @@ public class RateLimitRequestInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         var authentication = (UserAuthentication) SecurityContextHolder.getContext().getAuthentication();
-        long now = timeSource.getCurrentMills();
-        long minuteAgo = now - MINUTE_NI_MILLS + 1; // make left border exclusive
+        var now = timeSource.getCurrentMills();
+        var minuteAgo = now - MINUTE_NI_MILLS + 1; // make left border exclusive
         var count = redisTemplate.opsForZSet().count(format(KEY_PREFIX_TEMPLATE, authentication.getId()), minuteAgo, now);
 
         if (count != null && count + 1 > LIMIT) {

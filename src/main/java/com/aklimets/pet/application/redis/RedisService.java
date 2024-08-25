@@ -39,30 +39,24 @@ public class RedisService {
         var end = getCurrentPeriodEndMillsWithShift(0);
         log.info("Start period mills {}", start);
         log.info("End period mills {}", end);
+        findKeysByPrefix(USER_REQUESTS).forEach(key -> processUserRequestsKey(start, end, key));
+    }
 
-        List<String> userRequestsKeys = findKeysByPrefix(USER_REQUESTS);
-        for (String key : userRequestsKeys) {
-            var count = redisTemplate.opsForZSet().count(key, start, end);
-            if (count > 0) {
-                var userId = extractIdFromKey(key, USER_REQUESTS);
-                var periodStart = LocalDateTime.ofInstant(Instant.ofEpochMilli(start), UTC);
-                var periodEnd = LocalDateTime.ofInstant(Instant.ofEpochMilli(end), UTC);
-
-                UserRequestsCountsKafkaEvent event = new UserRequestsCountsKafkaEvent(
-                        periodStart.toString(),
-                        periodEnd.toString(),
-                        userId,
-                        count
-                );
-                kafkaAdapter.send(event);
-            }
+    private void processUserRequestsKey(long start, long end, String key) {
+        var count = redisTemplate.opsForZSet().count(key, start, end);
+        if (count > 0) {
+            var event = new UserRequestsCountsKafkaEvent(
+                    millsToDateTimeString(start),
+                    millsToDateTimeString(end),
+                    extractIdFromKey(key, USER_REQUESTS),
+                    count);
+            kafkaAdapter.send(event);
         }
-
     }
 
     public List<String> findKeysByPrefix(RedisKeyPrefix prefix) {
         List<String> keys = new ArrayList<>();
-        ScanOptions options = ScanOptions.scanOptions().match(prefix.getValue()).count(100).build();
+        var options = ScanOptions.scanOptions().match(prefix.getValue()).count(100).build();
         try (Cursor<String> cursor = redisTemplate.scan(options)) {
             while (cursor.hasNext()) {
                 keys.add(cursor.next());
@@ -90,13 +84,17 @@ public class RedisService {
     }
 
     private String extractIdFromKey(String key, RedisKeyPrefix redisPrefix) {
-        String regex = redisPrefix.getValue().replace("*", "(.*)");
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(key);
+        var regex = redisPrefix.getValue().replace("*", "(.*)");
+        var pattern = Pattern.compile(regex);
+        var matcher = pattern.matcher(key);
         if (matcher.matches()) {
             return matcher.group(1);
         }
         log.warn("Key does not match the provided pattern ()" + redisPrefix.getValue());
         return "";
+    }
+
+    private String millsToDateTimeString(long mills) {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(mills), UTC).toString();
     }
 }
