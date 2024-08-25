@@ -71,23 +71,22 @@ public class RedisService {
         return keys;
     }
 
-    // todo: change to current hour
     private long getCurrentPeriodEndMillsWithShift(int shift) {
         return timeSource.getCurrentLocalDateTime()
                 .withSecond(0)
                 .withNano(0)
+                .withMinute(0)
                 .minusHours(shift)
                 .toInstant(UTC).toEpochMilli();
     }
 
-    // todo: change to current hour
     private long getCurrentPeriodStartMillsWithShift(int shift) {
         return timeSource.getCurrentLocalDateTime()
                 .withSecond(0)
-                .minusMinutes(1)
                 .withNano(0)
-                .minusHours(shift)
-                .toInstant(UTC).toEpochMilli() + MILLISECOND;
+                .withMinute(0)
+                .minusHours(shift + 1)
+                .toInstant(UTC).toEpochMilli() + MILLISECOND; // makes mills exclusive
     }
 
     private String extractIdFromKey(String key, RedisKeyPrefix redisPrefix) {

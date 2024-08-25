@@ -15,7 +15,7 @@ public class RequestsProcessingScheduler {
 
     private final RedisService redisService;
 
-    @Scheduled(cron = "0 * * * * *") //todo: change to every hour
+    @Scheduled(cron = "${user.requests.counts.scheduling.pattern}")
     public void processUserRequests() {
         redisService.processUserRequests();
     }
