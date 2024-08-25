@@ -19,9 +19,10 @@ public class OutgoingRequestInterceptor implements ClientHttpRequestInterceptor 
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-        request.getHeaders().set(REQUEST_ID_HEADER, MDC.get("requestId"));
+        String requestId = MDC.get("requestId");
+        request.getHeaders().set(REQUEST_ID_HEADER, requestId);
         request.getHeaders().set(AUTH_HEADER, MDC.get(AUTH_HEADER));
-        log.info("Request ID has been populated");
+        log.info("Request ID {} has been populated", requestId);
         return execution.execute(request, body);
     }
 }

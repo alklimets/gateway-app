@@ -40,6 +40,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>com.aklimets.pet</groupId>
 			<artifactId>model</artifactId>
 			<version>1.0.0</version>
@@ -54,6 +59,12 @@
 		<dependency>
 			<groupId>com.aklimets.pet</groupId>
 			<artifactId>building-block</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.aklimets.pet</groupId>
+			<artifactId>event</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 
@@ -73,6 +84,13 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka -->
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
 		</dependency>
 
 		<dependency>
