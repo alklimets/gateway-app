@@ -15,7 +15,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.aklimets.pet.application.redis.RedisKeyPrefix.USER_REQUESTS;
@@ -35,11 +34,20 @@ public class RedisService {
 
     @Async("threadPoolTaskExecutor")
     public void processUserRequests() {
-        var start = getCurrentPeriodStartMillsWithShift(0);
-        var end = getCurrentPeriodEndMillsWithShift(0);
-        log.info("Start period mills {}", start);
-        log.info("End period mills {}", end);
+        var start = getCurrentPeriodStartMillsWithShift();
+        var end = getCurrentPeriodEndMillsWithShift();
+        log.info("Start period mills for process {}", start);
+        log.info("End period mills for process {}", end);
         findKeysByPrefix(USER_REQUESTS).forEach(key -> processUserRequestsKey(start, end, key));
+    }
+
+    @Async("threadPoolTaskExecutor")
+    public void cleanUpProcessedRequests() {
+        var start = getCurrentPeriodStartMillsWithShift(1);
+        var end = getCurrentPeriodEndMillsWithShift(1);
+        log.info("Start period mills for clean up {}", start);
+        log.info("End period mills for clean up {}", end);
+        findKeysByPrefix(USER_REQUESTS).forEach(key -> cleanUpUserRequestsByKey(start, end, key));
     }
 
     private void processUserRequestsKey(long start, long end, String key) {
@@ -54,6 +62,12 @@ public class RedisService {
         }
     }
 
+    private void cleanUpUserRequestsByKey(long start, long end, String key) {
+        var count = redisTemplate.opsForZSet().removeRangeByScore(key, start, end);
+        var userId = extractIdFromKey(key, USER_REQUESTS);
+        log.info("{} requests where removed for user id {}", count, userId);
+    }
+
     public List<String> findKeysByPrefix(RedisKeyPrefix prefix) {
         List<String> keys = new ArrayList<>();
         var options = ScanOptions.scanOptions().match(prefix.getValue()).count(100).build();
@@ -65,6 +79,10 @@ public class RedisService {
         return keys;
     }
 
+    private long getCurrentPeriodEndMillsWithShift() {
+        return getCurrentPeriodEndMillsWithShift(0);
+    }
+
     private long getCurrentPeriodEndMillsWithShift(int shift) {
         return timeSource.getCurrentLocalDateTime()
                 .withSecond(0)
@@ -72,6 +90,10 @@ public class RedisService {
                 .withMinute(0)
                 .minusHours(shift)
                 .toInstant(UTC).toEpochMilli();
+    }
+
+    private long getCurrentPeriodStartMillsWithShift() {
+        return getCurrentPeriodStartMillsWithShift(0);
     }
 
     private long getCurrentPeriodStartMillsWithShift(int shift) {
@@ -90,7 +112,7 @@ public class RedisService {
         if (matcher.matches()) {
             return matcher.group(1);
         }
-        log.warn("Key does not match the provided pattern ()" + redisPrefix.getValue());
+        log.warn("Key does not match the provided pattern {}", redisPrefix.getValue());
         return "";
     }
 

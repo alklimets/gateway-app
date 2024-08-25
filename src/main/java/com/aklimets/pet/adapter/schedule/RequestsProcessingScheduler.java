@@ -20,4 +20,10 @@ public class RequestsProcessingScheduler {
         redisService.processUserRequests();
     }
 
+
+    @Scheduled(cron = "${user.requests.counts.scheduling.pattern}")
+    public void cleanUpProcessedRequests() {
+        redisService.cleanUpProcessedRequests();
+    }
+
 }
