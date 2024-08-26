@@ -1,4 +1,4 @@
-package com.aklimets.pet.infrastructure.handler;
+package com.aklimets.pet.infrastructure.web.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.aklimets.pet.infrastructure.interceptor;
+package com.aklimets.pet.infrastructure.web.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;

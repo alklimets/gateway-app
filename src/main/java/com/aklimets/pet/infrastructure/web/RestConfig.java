@@ -1,7 +1,7 @@
 package com.aklimets.pet.infrastructure.web;
 
-import com.aklimets.pet.infrastructure.handler.RestTemplateResponseErrorHandler;
-import com.aklimets.pet.infrastructure.interceptor.OutgoingRequestInterceptor;
+import com.aklimets.pet.infrastructure.web.handler.RestTemplateResponseErrorHandler;
+import com.aklimets.pet.infrastructure.web.interceptor.OutgoingRequestInterceptor;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

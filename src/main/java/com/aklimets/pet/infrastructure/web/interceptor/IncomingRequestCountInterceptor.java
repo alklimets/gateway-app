@@ -1,4 +1,4 @@
-package com.aklimets.pet.infrastructure.interceptor;
+package com.aklimets.pet.infrastructure.web.interceptor;
 
 import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
 import com.aklimets.pet.util.datetime.TimeSource;

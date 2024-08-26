@@ -1,8 +1,8 @@
 package com.aklimets.pet.infrastructure.web;
 
-import com.aklimets.pet.infrastructure.interceptor.IncomingRequestCountInterceptor;
-import com.aklimets.pet.infrastructure.interceptor.IncomingRequestInterceptor;
-import com.aklimets.pet.infrastructure.interceptor.RateLimitRequestInterceptor;
+import com.aklimets.pet.infrastructure.web.interceptor.IncomingRequestCountInterceptor;
+import com.aklimets.pet.infrastructure.web.interceptor.IncomingRequestInterceptor;
+import com.aklimets.pet.infrastructure.web.interceptor.RateLimitRequestInterceptor;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

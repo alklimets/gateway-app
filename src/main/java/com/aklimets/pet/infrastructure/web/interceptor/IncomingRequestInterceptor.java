@@ -1,4 +1,4 @@
-package com.aklimets.pet.infrastructure.interceptor;
+package com.aklimets.pet.infrastructure.web.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
