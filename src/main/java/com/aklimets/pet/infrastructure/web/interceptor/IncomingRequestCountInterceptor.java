@@ -12,11 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import java.time.ZoneOffset;
-import java.util.UUID;
-
 import static java.lang.String.format;
-import static java.time.ZoneOffset.UTC;
 
 @Component
 @Slf4j

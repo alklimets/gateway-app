@@ -58,7 +58,7 @@ public class RedisService {
                     millsToDateTimeString(end),
                     extractIdFromKey(key, USER_REQUESTS),
                     count);
-            kafkaAdapter.send(event);
+            kafkaAdapter.send(event, "UserRequestsCount");
         }
     }
 

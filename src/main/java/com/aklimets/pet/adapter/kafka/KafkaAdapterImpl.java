@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class KafkaAdapterImpl implements DomainEventAdapter {
 
+    private static final String EVENT_TYPE_HEADER_KEY = "EventType";
+
     @Autowired
     private KafkaTemplate<String, DomainEvent> kafkaTemplate;
 
@@ -24,9 +26,9 @@ public class KafkaAdapterImpl implements DomainEventAdapter {
     private String requestsCountsTopic;
 
     @Override
-    public void send(DomainEvent event) {
-
+    public void send(DomainEvent event, String eventType) {
         Headers headers = new RecordHeaders();
+        headers.add(EVENT_TYPE_HEADER_KEY, eventType.getBytes());
         if (event instanceof RequestableDomainEvent<?> domainEvent) {
             var requestId = ((RequestId) domainEvent.getRequestId()).getValue();
             headers.add("requestId", requestId.getBytes());

@@ -5,8 +5,8 @@ import com.aklimets.pet.domain.model.userprofile.attribute.Country;
 import com.aklimets.pet.domain.model.userprofile.attribute.Name;
 import com.aklimets.pet.domain.model.userprofile.attribute.Surname;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 public record UserProfileRequest(
         @Valid @NotNull(message = "User profile name cannot be null") Name name,
