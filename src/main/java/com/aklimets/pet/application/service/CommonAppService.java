@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,19 +20,19 @@ public class CommonAppService {
 
     private final ControllerUtil controllerUtil;
 
-    public HttpEntity<?> exchangeGet(HttpServletRequest request, String appName) {
+    public ResponseEntity<?> exchangeGet(HttpServletRequest request, String appName) {
         return restService.exchangeGetWrapped(createRequestUrl(request, appName));
     }
 
-    public HttpEntity<?> exchangePost(HttpServletRequest request, String appName, Object body) {
+    public ResponseEntity<?> exchangePost(HttpServletRequest request, String appName, Object body) {
         return restService.exchangePostWrapped(createRequestUrl(request, appName), body);
     }
 
-    public HttpEntity<?> exchangePut(HttpServletRequest request, String appName, Object body) {
+    public ResponseEntity<?> exchangePut(HttpServletRequest request, String appName, Object body) {
         return restService.exchangePutWrapped(createRequestUrl(request, appName), body);
     }
 
-    public HttpEntity<?> exchangeDelete(HttpServletRequest request, String appName) {
+    public ResponseEntity<?> exchangeDelete(HttpServletRequest request, String appName) {
         return restService.exchangeDeleteWrapped(createRequestUrl(request, appName));
     }
 

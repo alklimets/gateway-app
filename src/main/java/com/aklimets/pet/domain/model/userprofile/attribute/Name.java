@@ -6,10 +6,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.NoArgsConstructor;
 
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Name extends DomainAttribute<String> {
 

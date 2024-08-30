@@ -2,9 +2,14 @@ package com.aklimets.pet.application.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -12,26 +17,34 @@ public class RestTemplateExecutorService {
 
     private final RestTemplate restTemplate;
 
-    public HttpEntity<?>  exchangeGetWrapped(String url) {
+    public ResponseEntity<?> exchangeGetWrapped(String url) {
         return exchangeWrapped(url, HttpMethod.GET, HttpEntity.EMPTY);
     }
 
-    public HttpEntity<?>  exchangePostWrapped(String url, Object request) {
+    public ResponseEntity<?> exchangePostWrapped(String url, Object request) {
         return exchangeWrapped(url, HttpMethod.POST, new HttpEntity<>(request));
     }
-    
-    public HttpEntity<?>  exchangePutWrapped(String url, Object request) {
+
+    public ResponseEntity<?> exchangePutWrapped(String url, Object request) {
         return exchangeWrapped(url, HttpMethod.PUT, new HttpEntity<>(request));
     }
 
-    public HttpEntity<?>  exchangeDeleteWrapped(String url) {
+    public ResponseEntity<?> exchangeDeleteWrapped(String url) {
         return exchangeWrapped(url, HttpMethod.DELETE, HttpEntity.EMPTY);
     }
 
-    private  HttpEntity<?> exchangeWrapped(String url, HttpMethod method, HttpEntity<?> entity) {
-        return restTemplate.exchange(url,
+    private ResponseEntity<?> exchangeWrapped(String url, HttpMethod method, HttpEntity<?> entity) {
+        return wrapHeaders(restTemplate.exchange(url,
                 method,
                 entity,
-                String.class);
+                String.class));
+    }
+
+    private ResponseEntity<?> wrapHeaders(ResponseEntity<String> response) {
+        var customHeaders = new HttpHeaders();
+        response.getHeaders().toSingleValueMap()
+                .entrySet().stream().filter(entry -> !entry.getKey().equals("Transfer-Encoding"))
+                .forEach(entry -> customHeaders.put(entry.getKey(), List.of(entry.getValue())));
+        return new ResponseEntity<>(response.getBody(), customHeaders, response.getStatusCode());
     }
 }
