@@ -1,9 +1,7 @@
 package com.aklimets.pet.adapter.endpoint;
 
 import com.aklimets.pet.application.service.SecurityService;
-import com.aklimets.pet.domain.dto.request.AuthenticationRequest;
-import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequest;
-import com.aklimets.pet.domain.dto.request.RegistrationRequest;
+import com.aklimets.pet.domain.dto.request.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,5 +34,15 @@ public class SecurityEndpoint {
     @GetMapping("/profile/confirm/{code}")
     public ResponseEntity<?> confirmProfile(@PathVariable String code) {
         return securityService.confirmProfile(code);
+    }
+
+    @PostMapping("/forget-password")
+    public ResponseEntity<?> forgetPassword(@Valid @RequestBody ForgetPasswordRequest request) {
+        return securityService.forgetPassword(request);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        return securityService.resetPassword(request);
     }
 }
