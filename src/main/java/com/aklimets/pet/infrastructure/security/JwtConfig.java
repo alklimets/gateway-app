@@ -1,27 +1,22 @@
 package com.aklimets.pet.infrastructure.security;
 
+import com.aklimets.pet.crypto.provider.VersionedKeyPairProvider;
 import com.aklimets.pet.jwt.util.JwtExtractor;
-import com.aklimets.pet.jwt.util.JwtKeyReader;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class JwtConfig {
 
-    @Value("${jwt.access.public.key.path}")
-    private String accessPublicKeyPath;
+    @Autowired
+    private VersionedKeyPairProvider jwtAccessKeyPairProvider;
 
-    @Value("${jwt.refresh.public.key.path}")
-    private String refreshPublicKeyPath;
-
-    @Bean
-    public JwtKeyReader jwtKeyReader() {
-        return new JwtKeyReader();
-    }
+    @Autowired
+    private VersionedKeyPairProvider jwtRefreshKeyPairProvider;
 
     @Bean
-    public JwtExtractor jwtExtractor() throws Exception {
-        return new JwtExtractor(accessPublicKeyPath, refreshPublicKeyPath, jwtKeyReader());
+    public JwtExtractor jwtExtractor() {
+        return new JwtExtractor(jwtAccessKeyPairProvider, jwtRefreshKeyPairProvider);
     }
 }

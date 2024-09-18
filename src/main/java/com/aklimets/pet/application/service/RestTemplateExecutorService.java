@@ -1,6 +1,8 @@
 package com.aklimets.pet.application.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -12,10 +14,11 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@AllArgsConstructor
 public class RestTemplateExecutorService {
 
-    private final RestTemplate restTemplate;
+    @Qualifier("restTemplate")
+    @Autowired
+    private RestTemplate restTemplate;
 
     public ResponseEntity<?> exchangeGetWrapped(String url) {
         return exchangeWrapped(url, HttpMethod.GET, HttpEntity.EMPTY);
